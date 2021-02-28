@@ -1,0 +1,18 @@
+server {
+    listen       80;
+    server_name  localhost;
+
+    location /api/ {
+        proxy_pass http://${PHONYX_BACKEND}/;
+    }
+
+    location / {
+        proxy_pass http://${PHONYX_FRONTEND}/;
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
+
