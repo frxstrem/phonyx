@@ -11,3 +11,4 @@ RUN npm run build
 FROM nginx:1.19
 
 COPY --from=builder /app/build /usr/share/nginx/html
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
