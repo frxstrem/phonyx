@@ -3,6 +3,9 @@
 /frontend/build
 node_modules
 
+# data files
+/backend/data
+
 # Logs
 logs
 *.log
