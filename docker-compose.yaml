@@ -1,16 +1,33 @@
 version: "3.9"
 services:
+  database:
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
   backend:
     build: ./backend
+    environment:
+      - DATABASE_URL=mongodb://database
+    depends_on:
+      - database
+    command: sh -c "sleep 5 && node ."
   frontend:
     build: ./frontend
   nginx:
     image: nginx
     volumes:
-    - ./nginx-templates:/etc/nginx/templates
+      - ./nginx-templates:/etc/nginx/templates
     ports:
-    - 8080:80
+      - 8080:80
     environment:
-    - NGINX_PORT=80
-    - PHONYX_BACKEND=backend:3000
-    - PHONYX_FRONTEND=frontend:80
+      - NGINX_PORT=80
+      - PHONYX_BACKEND=backend:3000
+      - PHONYX_FRONTEND=frontend:80

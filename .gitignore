@@ -4,7 +4,7 @@
 node_modules
 
 # data files
-/backend/data
+/data
 
 # Logs
 logs
