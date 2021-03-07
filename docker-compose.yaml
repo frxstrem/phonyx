@@ -29,5 +29,5 @@ services:
       - 8080:80
     environment:
       - NGINX_PORT=80
-      - PHONYX_BACKEND=backend:3000
+      - PHONYX_BACKEND=backend:80
       - PHONYX_FRONTEND=frontend:80

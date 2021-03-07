@@ -1,5 +1,6 @@
 import { Db } from "mongodb";
 import { User } from "../models";
+import { hashPassword } from "../services/user";
 
 type Migration = {
   id: number;
@@ -20,6 +21,7 @@ const migrations: Migration[] = [
     async apply(db: Db): Promise<void> {
       await db.collection<User>("users").insertOne({
         username: "admin",
+        passwordHash: hashPassword("admin"),
         isAdmin: true,
       });
     },
