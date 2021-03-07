@@ -32,13 +32,21 @@ export type AuthProviderProps = {
   children: ReactNode;
 };
 
+function basicAuth(username: string, password: string): string {
+  return "Basic " + btoa(username + ":" + password);
+}
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [activeUser, setActiveUser] = useState<AuthUser | undefined>();
 
   const logIn = useCallback(
     async (username, password) => {
       // check against API to see if it is valid
-      const res = await fetch(getApiBaseUrl() + "/auth/status", {});
+      const res = await fetch(getApiBaseUrl() + "/auth/status", {
+        headers: {
+          authorization: basicAuth(username, password),
+        },
+      });
       if (!res.ok) {
         throw new Error(`Failed to log in: ${res.status} ${res.statusText}`);
       }
@@ -61,8 +69,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const authHeaders =
       activeUser != null
         ? {
-            authorization:
-              "Basic " + btoa(activeUser.username + ":" + activeUser.password),
+            authorization: basicAuth(activeUser.username, activeUser.password),
           }
         : {};
 
