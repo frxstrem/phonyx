@@ -24,6 +24,10 @@ type AppContext = Koa.DefaultContext & {
   await mongo.connect();
   const db = mongo.db("phonyx");
 
+  console.log("Applying database migrations...");
+  await applyMigrations(db);
+  console.log("All pending migrations applied...");
+
   const userService = new UserService(db);
 
   const app = new Koa<AppState, AppContext>();
